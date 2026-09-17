@@ -292,3 +292,24 @@ Limit yourself to 2 fix rounds (the Nebius timebox is separate). If something is
 ```
 
 **Result:** Worked on the first run; 0 of 2 fix rounds used. Nebius worked in about 1 minute: base_url https://api.tokenfactory.nebius.com/v1/, model Qwen/Qwen3-30B-A3B-Instruct-2507, and it wrote all 3 summaries. All 3 briefs saved: (a) Teampay, Clara, Mesh; (b) clarify asked, then Relay, Rho, Brex; (c) Brex failing, shown as incomplete in Data gaps. Also verified: the OpenAI fallback with a fake Nebius key, handoff after 2 clarifications via main.py with piped input, and reject (not saved). No bugs blocked the graph and discovery/researcher/extractor are unchanged. Still off (upstream, not fixed): in (a) discovery's retry query drops the context, so "Mesh" is an unrelated productivity app; Relay pricing mixes in Relay.app; discovery searches count toward the 12-search limit, so 2 clarifications can leave too few searches for gathering. Added output_filename as a run-config option so test runs don't overwrite each other.
+
+---
+
+## Final fix round: discovery context, search budget, publish dates
+
+**Time:** 2026-09-16 21:23
+
+```
+Final fix round: three bugs, nothing else. Keep changes minimal and commented. Don't change graph.py, brief.py or main.py.
+
+1. discovery.py: the retry query must keep the human's context. When company_context is set, the better_query / fallback query must include it (e.g. "Ramp corporate card and spend management alternatives"), and the prompt should tell the LLM that competitors must match that context.
+
+2. researcher.py: raise MAX_SEARCHES from 12 to 20, so a run with two clarifications still has enough searches to research three competitors.
+
+3. tools.py + extractor.py: keep You.com's publish date (page_age) on each result as a "date" field when present. Pass it to the extractor LLM next to each result, and tell it to use that date for news items (still "not found" if absent) so is_old works.
+
+Then re-run scripts/test_graph.py to regenerate all three briefs in outputs/. Show me the log lines for each run, the competitors found, and how many news items now have real dates.
+Limit yourself to 2 fix rounds. Then log, commit and push.
+```
+
+**Result:** Worked; 1 of 2 fix rounds used. (1) When context is set, the retry query keeps it (code replaces an LLM query without it); the prompt says competitors must match the context. Verified with a forced not_enough_info: the retry was "Ramp corporate card and spend management alternatives". (2) MAX_SEARCHES is 20. (3) page_age is kept as "date" and passed to the extractor as "published:"; verified a 2024 item gets is_old=true and an undated item "not found". Regenerated briefs: Ramp -> Brex, Airwallex, Expensify (8/8 news dated); Mercury -> clarified, then Brex, Rho, Grasshopper Bank (8/8); Ramp with Brex failing -> Airwallex, Expensify (6/6), Brex in Data gaps. Before this round almost no news had dates. Fix round 1: dates came back mixed (some with times), so code now trims them to YYYY-MM-DD. Not seen in real runs: discovery's retry (it found competitors on the first try every time) and old news (freshness=month only returns recent items). graph.py, brief.py and main.py unchanged.

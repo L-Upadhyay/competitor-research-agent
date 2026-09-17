@@ -63,7 +63,11 @@ Rules:
   "ambiguous": assume the context identifies the company.
 - If the search results don't mention a company with this exact name, or don't clearly
   name its competitors, choose "not_enough_info" (never "ambiguous") and suggest a
-  better search query that is DIFFERENT from the query already used.
+  better search query that is DIFFERENT from the query already used. If the user gave
+  context, the better query must include that context.
+- If the user gave context, every competitor must match that context (same kind of
+  product or business). Ignore results about other companies or products that merely
+  share the name.
 - Otherwise choose "found" and list up to {MAX_COMPETITORS} competitors, most relevant first."""
 
 
@@ -170,8 +174,16 @@ def discover(state):
         if round_number == 1:
             better = decision.better_query.strip()
             # If the LLM didn't suggest a genuinely different query, use our own.
+            # Keep the human's context in the retry, so we don't drift to a
+            # different company or product with the same name.
+            if context.strip():
+                fallback = f"{company} {context.strip()} alternatives"
+            else:
+                fallback = f'"{company}" company alternatives similar companies'
             if not better or better.lower() == query.lower():
-                better = f'"{company}" company alternatives similar companies'
+                better = fallback
+            elif context.strip() and context.strip().lower() not in better.lower():
+                better = fallback
             query = better
             _log(f"decision: not_enough_info -> retrying with: {query}")
 

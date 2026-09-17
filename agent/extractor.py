@@ -65,7 +65,9 @@ Rules:
   The result's title or snippet must mention {competitor} by name. Drop anything about
   other topics or similarly named things (for example "Brexit" is not about "Brex"),
   and drop sponsored or advertising content.
-- For each news item, use the date stated in the result, or "not found" if none is given.
+- For each news item, set date to that result's "published:" date (as YYYY-MM-DD).
+  If the result says "published: not found", write "not found". Don't take dates
+  from other results.
   Set is_old=true if that date is more than 12 months before today's date; if the date
   is "not found", set is_old=false.
 - sources: the URL of EVERY result you used for pricing, features, positioning or news.
@@ -81,11 +83,13 @@ def _log(message):
 
 
 def _format_results(entry):
-    """Turn the gathered results into plain text, keeping only title, url and snippet."""
+    """Turn the gathered results into plain text, keeping only title, url, publish date and snippet."""
     lines = []
     for section in ("product", "news"):
         for item in entry.get(section, []):
-            lines.append(f"- [{section}] {item['title']}\n  {item['url']}\n  {item['snippet']}")
+            # The publish date comes from You.com; some results don't have one.
+            date_line = f"published: {item['date']}" if item.get("date") else "published: not found"
+            lines.append(f"- [{section}] {item['title']}\n  {item['url']}\n  {date_line}\n  {item['snippet']}")
     return "\n".join(lines)
 
 
@@ -157,6 +161,10 @@ def extract(state):
                 rejected_urls.add(item.url)
         dropped = len(rejected_urls)
         news = news[:MAX_NEWS]
+        # Show dates as plain YYYY-MM-DD (You.com sometimes adds a time, e.g. "2026-09-01T13:00:00").
+        for item in news:
+            if re.match(r"\d{4}-\d{2}-\d{2}T", item.date):
+                item.date = item.date[:10]
 
         # Safety check 2: sources must be real result links, and not a news item we just rejected.
         # News links we kept are always listed as sources.

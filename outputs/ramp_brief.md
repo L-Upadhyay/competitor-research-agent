@@ -2,74 +2,85 @@
 
 _Context: corporate card and spend management_
 
-_Generated 2026-09-16 · Competitors: Teampay, Clara, Mesh_
+_Generated 2026-09-16 · Competitors: Brex, Airwallex, Expensify_
 
 ## Executive summary
 
-Teampay positions itself as a financial management solution for companies of various sizes, emphasizing pre-approved purchasing workflows and headcount-based pricing to control spending risks. Clara markets itself as a scalable payments platform for large and growing businesses, focusing on agility and managing all types of payments, though its pricing details are not available. Mesh offers a free entry point with a base plan at $4 per user per month, targeting users who value privacy, goal setting, and task management with integrations across key productivity tools. While Teampay and Clara focus on corporate spending and payment infrastructure, Mesh appears to target individual and team productivity with a freemium model and privacy-centric design. Recent news for Teampay and Mesh includes profile updates and alternative comparisons, while Clara has no recent public updates available.
+Brex positions itself as an all-in-one corporate card and spend management platform tailored for startups, growing companies, and mid-market businesses, integrating card issuance, expense management, travel, bill pay, and business accounts into a unified workflow. Airwallex differentiates by focusing on global financial operations, offering multi-currency accounts, cross-border transfers, and advanced spend controls, with a tiered subscription model that includes a free option under certain conditions. Expensify emphasizes individual and small business expense management, providing tools like unlimited SmartScans, distance tracking, and export capabilities, with a strong recent focus on AI integrations to enhance automation and workflow efficiency. While Brex and Airwallex both offer corporate cards and spend controls, Brex’s pricing scales with active employees and includes a free Essentials tier, whereas Airwallex’s pricing is based on legal entities and includes a free tier with deposit or balance requirements. Expensify’s free tier supports individual use, and its recent news highlights strategic AI partnerships, signaling a shift toward intelligent automation, while Brex and Airwallex have focused on growth benchmarks and IPO readiness, respectively.
 
-## Teampay
+## Brex
 
-**Pricing:** Teampay pricing is based on a combination of factors: the number of employees at your company, the features and modules you need, contract term length, and whether you're a new customer or renewing. Teampay typically prices based on total company headcount rather than per active user or per transaction.
-
-**Core features:**
-- Manages all types of purchasing
-- Purchasing workflow with pre-coded and pre-approved transactions
-- User-friendly purchasing interface for employees
-- Finance teams can control unauthorized spending risk
-- Pricing scales with organizational size via headcount-based pricing
-
-**Positioning:** Teampay by Paystand is positioned for companies of various sizes across a range of industries that want to improve financial management. It emphasizes easy employee purchasing with finance controls that keep transactions pre-coded and pre-approved.
-
-**Recent news:**
-- [Teampay Alternatives (Without Switching Cards) | Vergo](https://www.getvergo.com/learn/teampay-alternatives) — not found
-
-**Sources:**
-- https://www.vendr.com/marketplace/teampay
-- https://www.g2.com/products/teampay/reviews
-- https://www.getvergo.com/learn/teampay-alternatives
-
-## Clara
-
-**Pricing:** not found
+**Pricing:** Brex has 3 different plans. Brex Essentials is $0 per user each month. Pricing scales primarily with the number of active employees (cardholders and non-cardholders who use the platform), with per-employee rates often decreasing at higher volumes (e.g., 100+ employees, 500+ employees). Moving from Essentials to Premium or Enterprise increases per-employee costs.
 
 **Core features:**
-- Locally issued corporate cards
-- Bill pay
-- Financing
-- B2B platform built for scale
-- Helps companies make and manage all their payments
+- Corporate cards
+- Spend management workflow
+- Expense management
+- Travel
+- Bill pay and business accounts
 
-**Positioning:** Clara positions itself as a payments platform for large and growing businesses, emphasizing agility and financial clarity. It says it helps companies manage all their payments and serves over 20,000 businesses in Latin America.
+**Positioning:** Brex is positioned as a corporate card and spend management platform for startups, growing companies, and mid-market businesses. It combines card issuance, spend controls, expense management, travel, bill pay, and business accounts into one workflow.
 
 **Recent news:**
-_no recent news found_
+- [Brex Benchmark: Top 25 Fastest Growing Startups of Summer 2026](https://www.brex.com/journal/brex-benchmark-articles/top-25-fastest-growing-startups-of-summer-2026) — 2026-08-24
+- [Brex Rewards Points: How They Work in 2026 (And How to Turn Them ...](https://cashformymiles.com/brex-rewards-points-guide-2026/) — 2026-09-11
 
 **Sources:**
-- https://job-boards.greenhouse.io/clara/jobs/5222047007
+- https://www.brex.com/pricing
+- https://www.vendr.com/marketplace/brex
+- https://www.hoppier.com/blog/brex-review
+- https://cashformymiles.com/brex-rewards-points-guide-2026/
+- https://www.brex.com/journal/brex-benchmark-articles/top-25-fastest-growing-startups-of-summer-2026
 
-## Mesh
+## Airwallex
 
-**Pricing:** It's free to get started. Upgrade to access unlimited search history, unlock additional features, and support privacy-focused independent software. Base plan is priced at $4 per user per month.
+**Pricing:** Airwallex uses a tiered subscription model with three plans. Monthly fees are charged per business legal entity (not per account), and all prices exclude VAT. One plan is free if you deposit £10k/month or hold a £10k balance. The results also say card and FX-related pricing exists, but the detailed plan prices are not fully stated in the results.
 
 **Core features:**
-- Unlimited search history on upgrade
-- Additional features on upgrade
-- Privacy-focused independent software
-- Goal setting
-- Task management and integrations with Gmail, MS Teams, and Salesforce
+- Core global accounts and transfers
+- Advanced spend controls
+- 50 company cards
+- Multi-conditional approvals
+- Unlimited cards
 
-**Positioning:** Mesh is pitched as a tool anyone can start for free, with upgrades for users who want more history, more features, and privacy-focused independent software. It is also described as software for businesses, with a base plan aimed at essential goal-setting and task-management workflows plus common app integrations.
+**Positioning:** Airwallex is positioned as a tiered platform for global accounts, transfers, and spend management. The results also frame it as an option for companies needing corporate cards, multi-currency spending, and broader financial operations automation.
 
 **Recent news:**
-- [Mesh Payments - 2026 Company Profile, Team, Funding & Competitors ...](https://tracxn.com/d/companies/mesh-payments/__0pUs9TZwwnCmU1sz2H0nBJz-5yWBgPKDJVkQ5uN2WLM) — not found
-- [Mesh C O M P A N Y P R O F I L E A S O F A U G 2 0 2 6 meshpay.com](https://siliconvalleyinvestclub.com/ru/companies/mesh/tear-sheet.pdf) — not found
+- [Airwallex president Lucy Liu on the company’s plans to be ‘IPO-ready’ | Fortune](https://fortune.com/2026/08/31/airwallex-president-lucy-liu-ipo-plans/) — 2026-08-31
+- [Airwallex expands from cross-border payments to autonomous finance—though president Lucy Liu says it’s still ‘not the best time’ for an IPO | Fortune](https://fortune.com/article/airwallex-fundraise-lucy-liu-ai-fintech-ipo-08-20-2026/) — 2026-08-20
+- [Stablecoins are crypto's killer app—but no one can agree on who will use them | Fortune](https://fortune.com/2026/08/31/who-will-use-stablecoins-airwallex-dan-kim/) — 2026-08-31
 
 **Sources:**
-- https://me.sh/pricing
-- https://zoftwarehub.com/products/mesh/pricing
-- https://tracxn.com/d/companies/mesh-payments/__0pUs9TZwwnCmU1sz2H0nBJz-5yWBgPKDJVkQ5uN2WLM
-- https://siliconvalleyinvestclub.com/ru/companies/mesh/tear-sheet.pdf
+- https://www.wearefounders.uk/airwallex-pricing-2026-every-plan-fee-and-hidden-cost-explained/
+- https://fortune.com/2026/08/31/airwallex-president-lucy-liu-ipo-plans/
+- https://fortune.com/article/airwallex-fundraise-lucy-liu-ai-fintech-ipo-08-20-2026/
+- https://fortune.com/2026/08/31/who-will-use-stablecoins-airwallex-dan-kim/
+
+## Expensify
+
+**Pricing:** Free tier provides individual expense tracking without any workspace features. Unlimited SmartScans with no monthly cap, distance tracking, manual expense entry, and export to CSV or spreadsheet formats are included. Receipts can be forwarded to receipts@expensify.com for automatic scanning. Expensify price plans have limits based on SmartScans, not on the number of persons.
+
+**Core features:**
+- Individual expense tracking
+- Unlimited SmartScans
+- Distance tracking
+- Manual expense entry
+- Export to CSV or spreadsheet formats
+
+**Positioning:** Expensify is positioned as expense management software for individuals, freelancers, and businesses of all sizes. The results also describe it as a way to manage expenses, travel, and corporate cards, with an emphasis on simplifying workflows and helping users handle back-office expense tasks.
+
+**Recent news:**
+- [Expensify Adds Anthropic Integration to Claude | EXFY Stock News](https://www.stocktitan.net/news/EXFY/expensify-becomes-one-of-the-first-expense-management-tools-5qgy05a1s0ex.html) — 2026-09-15
+- [Expensify Launches Rillet AI ERP Integration | EXFY Stock News](https://www.stocktitan.net/news/EXFY/expensify-launches-native-integration-with-rillet-the-ai-native-oqr7d3dnej9f.html) — 2026-09-01
+- [Expensify Launches Native Integration with Rillet, the AI-Native ERP](https://finance.yahoo.com/technology/ai/articles/expensify-launches-native-integration-rillet-130000534.html) — 2026-09-01
+
+**Sources:**
+- https://checkthat.ai/brands/expensify/pricing
+- https://www.spendflo.com/blog/expensify-pricing-guide
+- https://www.trustradius.com/products/expensify/pricing
+- https://www.stocktitan.net/news/EXFY/expensify-becomes-one-of-the-first-expense-management-tools-5qgy05a1s0ex.html
+- https://www.stocktitan.net/news/EXFY/expensify-launches-native-integration-with-rillet-the-ai-native-oqr7d3dnej9f.html
+- https://finance.yahoo.com/technology/ai/articles/expensify-launches-native-integration-rillet-130000534.html
 
 ## Data gaps
 
@@ -77,4 +88,4 @@ none
 
 ---
 
-_Searches used: 8 · Summary model: Nebius Qwen/Qwen3-30B-A3B-Instruct-2507_
+_Searches used: 7 · Summary model: Nebius Qwen/Qwen3-30B-A3B-Instruct-2507_

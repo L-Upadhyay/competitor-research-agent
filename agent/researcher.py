@@ -14,7 +14,7 @@
 from agent.tools import search_you
 
 # The most searches allowed in one whole run, counting the discovery step's searches.
-MAX_SEARCHES = 12
+MAX_SEARCHES = 20
 
 # How many results to ask for in each search.
 RESULTS_PER_SEARCH = 5

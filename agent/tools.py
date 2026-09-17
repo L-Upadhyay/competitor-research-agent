@@ -27,16 +27,20 @@ MAX_SNIPPET_CHARS = 500
 
 
 def _trim(result):
-    """Keep only the title, link and a short piece of text from one search result."""
+    """Keep only the title, link, a short piece of text and the publish date from one search result."""
     # Web results come with a list of "snippets"; news results only have a
     # "description". Use the first snippet if there is one, otherwise the description.
     snippets = result.get("snippets") or []
     text = snippets[0] if snippets else (result.get("description") or "")
-    return {
+    trimmed = {
         "title": result.get("title", ""),
         "url": result.get("url", ""),
         "snippet": text[:MAX_SNIPPET_CHARS],
     }
+    # You.com's "page_age" is the publish date. Keep it as "date" when it's given.
+    if result.get("page_age"):
+        trimmed["date"] = result["page_age"]
+    return trimmed
 
 
 def search_you(query, count=5, recent_only=False):
