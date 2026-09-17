@@ -246,3 +246,49 @@ Limit yourself to 2 fix rounds. If something is still off after that, stop and r
 ```
 
 **Result:** Expectations met after 2 fix rounds (limit reached; stopped there). Brex and Expensify filled in with source URLs, Airwallex skipped without an LLM call, no off-topic news. Round 1: Brex pricing was "not found" although a snippet said "Essentials $0 per user/month", so the pricing rule was spelled out; a Motley Fool item not mentioning Brex was listed as news, so code now requires the competitor's name as a whole word in the result; sources missed product pages, so the prompt now asks for every result used. Round 2: a rejected news URL stayed in sources, the "dropped" count included items cut by the 3-item limit, and a "Sponsored" Forbes ad was listed as news; all three fixed. Still off: most news dates are "not found" (search_you drops You.com's page_age); "news" still includes Brex's own blog and a rewards guide while a Capital One/Brex item was missed; one Expensify item got a date apparently borrowed from a duplicate story; the same Rillet story appears twice; Expensify's "dropped 2" wasn't investigated.
+
+---
+
+## Orchestrator: brief writer, LangGraph graph, interactive runner
+
+**Time:** 2026-09-16 21:16
+
+```
+Next component: the orchestrator. Keep it simple and commented for a non-coder. Don't change discovery.py, researcher.py or extractor.py unless a bug blocks the graph (tell me if so). Do the steps in order.
+
+1. agent/state.py: add fields clarify_attempts (int), brief_model (str), saved_path (str), human_decision (str).
+
+2. agent/brief.py: a function write_brief(state) -> dict.
+   - Build the per-competitor sections IN CODE from state["findings"] (pricing, features, positioning, recent news with dates and links, sources, and a "⚠ incomplete data" note when complete is False). Handle fields that are text like "not available: ..." instead of lists.
+   - Only the executive summary (3-5 sentences comparing the competitors) comes from an LLM, given only the findings.
+   - Summary model: try Nebius first via ChatOpenAI with the Nebius OpenAI-compatible base_url and NEBIUS_API_KEY (check Nebius docs for the correct base_url and list available models; pick a small instruct model). If the Nebius call fails for any reason, log "[brief] Nebius failed -> falling back to OpenAI" and use agent/llm.py. Record the model used in brief_model.
+   - End the brief with "Data gaps" (the errors list, or "none") and a footer with search_count and the model used.
+   - Timebox Nebius to 10 minutes of your effort. If it isn't working by then, keep the OpenAI fallback, leave the Nebius code in place, and tell me why.
+
+3. agent/graph.py: a LangGraph StateGraph over AgentState with an in-memory checkpointer and thread_id.
+   Nodes: discover -> (route)
+     - found -> confirm_competitors (interrupt(): show the list; the human replies "" to accept or a comma-separated list to replace it)
+     - ambiguous / not_found -> clarify (interrupt(): show human_question; the reply becomes company_context, clarify_attempts += 1) -> discover again. If clarify_attempts reaches 2, go to handoff instead.
+   confirm_competitors -> gather -> extract -> (route)
+     - if no competitor has any data -> handoff
+     - else -> write_brief -> approve_brief (interrupt(): show the brief; reply "approve" or "reject")
+   approve_brief -> approve: save_brief (write outputs/<company>_brief.md, set saved_path) -> END; reject: END without saving.
+   handoff: print a clear message explaining what failed (errors) and what the human should do, then END.
+   Every routing decision prints one log line, e.g. "[orchestrator] discovery ambiguous -> asking human". Set a recursion limit of 25.
+
+4. main.py: an interactive terminal runner.
+   - Ask for company and optional context with input(). Optional flag --fail NAME sets FAIL_SEARCH_FOR=NAME (for the demo).
+   - Run the graph; at each interrupt print the question/payload and resume with Command(resume=input(...)).
+   - At the end print where the brief was saved, or that it wasn't.
+   - Wrap the run so an unexpected exception prints a friendly message instead of a traceback.
+
+5. scripts/test_graph.py: run the graph NON-interactively with scripted answers and save real outputs:
+   a) Ramp, context "corporate card and spend management", FAIL_SEARCH_FOR unset: accept competitors, approve -> outputs/ramp_brief.md
+   b) Mercury, no context: answer the clarify question with "the fintech business bank for startups", accept competitors, approve -> outputs/mercury_brief.md
+   c) Ramp with FAIL_SEARCH_FOR set to the first competitor discovery returns: accept, approve -> the brief shows that competitor as incomplete in Data gaps (save as outputs/ramp_brief_with_failure.md)
+   Print the log lines for each run and the first 40 lines of each brief.
+
+Limit yourself to 2 fix rounds (the Nebius timebox is separate). If something is still off, stop and report it. Then log, commit and push. Also tell me the exact command to run the interactive demo.
+```
+
+**Result:** Worked on the first run; 0 of 2 fix rounds used. Nebius worked in about 1 minute: base_url https://api.tokenfactory.nebius.com/v1/, model Qwen/Qwen3-30B-A3B-Instruct-2507, and it wrote all 3 summaries. All 3 briefs saved: (a) Teampay, Clara, Mesh; (b) clarify asked, then Relay, Rho, Brex; (c) Brex failing, shown as incomplete in Data gaps. Also verified: the OpenAI fallback with a fake Nebius key, handoff after 2 clarifications via main.py with piped input, and reject (not saved). No bugs blocked the graph and discovery/researcher/extractor are unchanged. Still off (upstream, not fixed): in (a) discovery's retry query drops the context, so "Mesh" is an unrelated productivity app; Relay pricing mixes in Relay.app; discovery searches count toward the 12-search limit, so 2 clarifications can leave too few searches for gathering. Added output_filename as a run-config option so test runs don't overwrite each other.

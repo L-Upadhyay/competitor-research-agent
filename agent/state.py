@@ -47,3 +47,16 @@ class AgentState(TypedDict):
 
     # The final written competitor brief.
     brief: str
+
+    # How many times we've asked the human to clarify which company they mean.
+    # After 2 tries we stop asking and hand over to the human.
+    clarify_attempts: int
+
+    # Which LLM wrote the brief's executive summary (e.g. a Nebius or OpenAI model).
+    brief_model: str
+
+    # Where the approved brief was saved on disk. Empty if it wasn't saved.
+    saved_path: str
+
+    # What the human said about the finished brief: "approve" or "reject".
+    human_decision: str
