@@ -212,3 +212,37 @@ Limit yourself to 2 fix rounds. If something is still off after that, stop and r
 ```
 
 **Result:** Worked on the first run; 0 of 2 fix rounds used. (a) all 3 complete, search_count 1 -> 7; (b) retry log shown twice, 2 Airwallex errors recorded, Brex and Expensify complete; (c) stopped after 3 searches (9 -> 12): Brex complete, Airwallex product only (complete=False), Expensify not reached (complete=False), "search limit reached" in errors. Fixed before the first run: product results were saved only after the news search, so a limit hit in between would have lost them. Not verified: the empty-result reworded retry (You.com returned results even for "Zxqvtrbl Labs"). discovery.py unchanged.
+
+---
+
+## Extractor agent (Agent 3)
+
+**Time:** 2026-09-16 21:08
+
+```
+Next component: agent/extractor.py (Agent 3). Keep it simple and commented for a non-coder. Don't change discovery.py or researcher.py.
+
+1. agent/extractor.py: a function extract(state) -> dict of state updates.
+   - For each competitor in state["competitors"]:
+     - If raw_results has no entry, or both product and news lists are empty: don't call the LLM. Set findings[competitor] to all fields "not available: search failed or skipped", complete=False. Log "[extract] Airwallex: no data -> skipped".
+     - Otherwise call the shared LLM (agent/llm.py) with structured output (Pydantic model CompetitorFindings):
+       pricing: str
+       core_features: list[str] (max 5)
+       positioning: str (1-2 sentences)
+       recent_news: list of {headline, date, url, is_old: bool} (max 3)
+       sources: list[str] (URLs actually used)
+     - Prompt rules: use ONLY the provided results; if something isn't stated, write "not found" (never guess prices); only include news that is clearly about this competitor (drop anything about other topics, e.g. "Brexit" for "Brex"); mark is_old=True if the item is more than 12 months before today's date (pass today's date in the prompt); every item must come from a result's URL.
+     - Pass only title, url and snippet to the LLM.
+     - If the LLM call raises an error: append a clear message to errors, set that competitor's findings to "not available: extraction failed", complete=False, and continue.
+     - Set complete from raw_results[competitor]["complete"].
+   - Log one line per competitor, e.g. "[extract] Brex: pricing found, 5 features, 2 news (1 old)".
+
+2. scripts/test_extractor.py with company="Ramp", company_context="corporate card and spend management", competitors=["Brex","Airwallex","Expensify"]:
+   - Run gather() once with FAIL_SEARCH_FOR="Airwallex", then extract() on the result.
+   - Print the log lines and the findings as readable JSON, plus errors.
+   - Expect: Brex and Expensify filled in with source URLs, Airwallex skipped without an LLM call, no off-topic news.
+
+Limit yourself to 2 fix rounds. If something is still off after that, stop and report it. Then log, commit and push.
+```
+
+**Result:** Expectations met after 2 fix rounds (limit reached; stopped there). Brex and Expensify filled in with source URLs, Airwallex skipped without an LLM call, no off-topic news. Round 1: Brex pricing was "not found" although a snippet said "Essentials $0 per user/month", so the pricing rule was spelled out; a Motley Fool item not mentioning Brex was listed as news, so code now requires the competitor's name as a whole word in the result; sources missed product pages, so the prompt now asks for every result used. Round 2: a rejected news URL stayed in sources, the "dropped" count included items cut by the 3-item limit, and a "Sponsored" Forbes ad was listed as news; all three fixed. Still off: most news dates are "not found" (search_you drops You.com's page_age); "news" still includes Brex's own blog and a rewards guide while a Capital One/Brex item was missed; one Expensify item got a date apparently borrowed from a duplicate story; the same Rillet story appears twice; Expensify's "dropped 2" wasn't investigated.
