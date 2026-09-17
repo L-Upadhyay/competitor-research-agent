@@ -57,11 +57,15 @@ def gather(state):
                 errors.append(f"{competitor}: {kind} search failed: {result['error']}")
                 return None
 
+            # Tag where each item came from: You.com's news list (True) or its web list (False).
+            news_items = [{**item, "from_news": True} for item in result["news"]]
+            web_items = [{**item, "from_news": False} for item in result["web"]]
+
             # Keep news first for news searches, web pages first for product searches.
             if kind == "news":
-                items = result["news"] + result["web"]
+                items = news_items + web_items
             else:
-                items = result["web"] + result["news"]
+                items = web_items + news_items
 
             if items:
                 _log(f"{competitor}: {kind} search ({len(items)} results)")

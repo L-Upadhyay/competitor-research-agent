@@ -20,6 +20,7 @@ class AgentState(TypedDict):
     #   "found"      - we have a list of competitors
     #   "ambiguous"  - the company name could mean more than one company
     #   "not_found"  - we couldn't find enough information
+    #   "error"      - a tool broke (You.com search or the OpenAI call failed)
     discovery_status: str
 
     # A question for the human when the agent is stuck and needs their help,

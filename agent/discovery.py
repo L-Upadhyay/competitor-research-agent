@@ -125,8 +125,10 @@ def discover(state):
         if not result["ok"]:
             _log(f"search failed: {result['error']}")
             errors.append(f"discovery search failed: {result['error']}")
+            # A broken tool (not an unclear company) is an "error", so the graph hands off
+            # instead of asking the human to describe the company better.
             return stop(
-                "not_found",
+                "error",
                 question=f"I couldn't search for {company}'s competitors because: {result['error']} "
                 "Can you fix this and try again?",
             )
@@ -137,8 +139,9 @@ def discover(state):
         except Exception as e:
             _log(f"LLM call failed: {e.__class__.__name__}")
             errors.append(f"discovery LLM call failed: {e.__class__.__name__}: {e}")
+            # A broken tool (not an unclear company) is an "error", as above.
             return stop(
-                "not_found",
+                "error",
                 question=f"I found search results for {company} but couldn't analyse them "
                 f"({e.__class__.__name__}). Check OPENAI_API_KEY and try again.",
             )

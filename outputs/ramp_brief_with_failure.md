@@ -6,7 +6,7 @@ _Generated 2026-09-16 · Competitors: Brex, Airwallex, Expensify_
 
 ## Executive summary
 
-Airwallex positions itself as a tiered business finance platform with global capabilities, emphasizing cross-border payments, multi-currency accounts, and advanced spend controls, while offering a free plan under certain conditions and charging monthly fees per business entity. Its core features include company cards, multi-conditional approvals, and dedicated support on higher tiers, with recent news highlighting its strategic shift toward autonomous finance and preparations for an IPO. Expensify focuses on simplifying expense management for individuals, freelancers, and businesses, offering unlimited SmartScans, receipt forwarding, and integration with AI tools like Claude and Rillet, reflecting a strong push into AI-driven financial workflows. While Expensify’s pricing is based on SmartScan limits and includes a free tier with basic features, Airwallex’s pricing structure is tiered with a free option tied to deposit or balance thresholds, though exact costs for higher tiers are not specified. Brex’s positioning, pricing, and recent developments are not available in the provided findings.
+Airwallex positions itself as a global business finance platform offering core accounts, cross-border transfers, and advanced spend controls, with tiered plans tailored to businesses of varying sizes, including enterprise-level support. Its pricing follows a tiered subscription model with a free option under certain conditions, and includes features like company cards, multi-conditional approvals, and dedicated account management, though specific USD amounts are not provided in the results. Expensify, in contrast, focuses on individual and small business expense tracking, emphasizing tools like unlimited SmartScans, distance tracking, and receipt automation, with a free tier that supports basic personal use. Expensify’s pricing is based on SmartScan limits rather than user count, and it lacks enterprise-level features like dedicated support or global accounts. Airwallex has recently been highlighted in news about its strategic shift toward autonomous finance and its preparation for an IPO, while Expensify has no recent news available.
 
 ## Brex
 
@@ -27,16 +27,16 @@ _not available: search failed or skipped_
 
 ## Airwallex
 
-**Pricing:** Airwallex uses a tiered subscription model with three plans. One plan is free if you deposit £10k/month or hold a £10k balance; monthly fees are charged per business legal entity (not per account), and all prices exclude VAT. The results do not provide the exact prices for the other plans.
+**Pricing:** Airwallex uses a tiered subscription model with three plans. The results say monthly fees are charged per business legal entity (not per account), and all prices exclude VAT. One plan is free if you deposit £10k/month or hold a £10k balance; another plan includes advanced spend controls and 50 company cards; the enterprise plan includes dedicated account manager and unlimited cards. A separate result says monthly prices are in USD, but no specific USD amounts are stated in the results.
 
 **Core features:**
 - Core global accounts and transfers
 - Advanced spend controls
-- Company cards (50 company cards on one plan; unlimited cards on the enterprise plan)
+- Company cards (50 on one plan; unlimited on enterprise)
 - Multi-conditional approvals
-- Dedicated account manager on the enterprise plan
+- Dedicated account manager
 
-**Positioning:** Airwallex is positioned as a tiered business finance platform with global accounts, transfers, and spend-management controls. The results also frame it as a cross-border payments platform with own global financial infrastructure and multi-currency card capabilities.
+**Positioning:** Airwallex is positioned as a business finance platform with global accounts, transfers, and spend-management capabilities. The results emphasize tiered plans for different business sizes, from core accounts to advanced controls and enterprise support.
 
 **Recent news:**
 - [Airwallex president Lucy Liu on the company’s plans to be ‘IPO-ready’ | Fortune](https://fortune.com/2026/08/31/airwallex-president-lucy-liu-ipo-plans/) — 2026-08-31
@@ -44,39 +44,31 @@ _not available: search failed or skipped_
 - [Stablecoins are crypto's killer app—but no one can agree on who will use them | Fortune](https://fortune.com/2026/08/31/who-will-use-stablecoins-airwallex-dan-kim/) — 2026-08-31
 
 **Sources:**
+- https://www.airwallex.com/en-us/pricing
 - https://www.wearefounders.uk/airwallex-pricing-2026-every-plan-fee-and-hidden-cost-explained/
-- https://www.airwallex.com/en-us/blog/compare-corporate-business-cards
-- https://www.airwallex.com/en-us/blog/what-is-a-virtual-corporate-card
-- https://www.airwallex.com/en-us/blog/how-to-apply-for-a-corporate-credit-card
-- https://www.airwallex.com/en-us/blog/ramp-alternatives
 - https://fortune.com/2026/08/31/airwallex-president-lucy-liu-ipo-plans/
 - https://fortune.com/article/airwallex-fundraise-lucy-liu-ai-fintech-ipo-08-20-2026/
 - https://fortune.com/2026/08/31/who-will-use-stablecoins-airwallex-dan-kim/
 
 ## Expensify
 
-**Pricing:** The free tier provides individual expense tracking without any workspace features. It includes unlimited SmartScans (no monthly cap), distance tracking, manual expense entry, and export to CSV or spreadsheet formats. Receipts can also be forwarded to receipts@expensify.com for automatic scanning. Expensify price plans have limits based on SmartScans, not on the number of persons.
+**Pricing:** Free tier provides individual expense tracking without workspace features; unlimited SmartScans with no monthly cap; distance tracking; manual expense entry; export to CSV or spreadsheet formats; receipts can be forwarded to receipts@expensify.com for automatic scanning. Pricing plans have limits based on SmartScans, not on the number of persons.
 
 **Core features:**
+- Individual expense tracking
 - Unlimited SmartScans
 - Distance tracking
 - Manual expense entry
-- Export data to CSV or spreadsheet formats
-- Receipt forwarding for automatic scanning
+- CSV/spreadsheet export
 
-**Positioning:** Expensify is positioned for individuals, freelancers, and businesses that need to track expenses, with an emphasis on simplifying workflows and helping with company-related or job-related costs. The results also describe it as a way to manage expenses, travel, and corporate cards.
+**Positioning:** Expensify is positioned as expense management software for individuals, freelancers, and businesses that need to track expenses and related costs. The results also describe it as helping manage expenses, travel, and corporate cards, with integrations that automate expense management workflows.
 
 **Recent news:**
-- [Expensify Adds Anthropic Integration to Claude | EXFY Stock News](https://www.stocktitan.net/news/EXFY/expensify-becomes-one-of-the-first-expense-management-tools-5qgy05a1s0ex.html) — 2026-09-15
-- [Expensify Launches Rillet AI ERP Integration | EXFY Stock News](https://www.stocktitan.net/news/EXFY/expensify-launches-native-integration-with-rillet-the-ai-native-oqr7d3dnej9f.html) — 2026-09-01
-- [Expensify Launches Native Integration with Rillet, the AI-Native ERP](https://finance.yahoo.com/technology/ai/articles/expensify-launches-native-integration-rillet-130000534.html) — 2026-09-01
+_no recent news found_
 
 **Sources:**
+- https://checkthat.ai/brands/expensify/pricing
 - https://www.trustradius.com/products/expensify/pricing
-- https://www.spendflo.com/blog/expensify-pricing-guide
-- https://www.stocktitan.net/news/EXFY/expensify-becomes-one-of-the-first-expense-management-tools-5qgy05a1s0ex.html
-- https://www.stocktitan.net/news/EXFY/expensify-launches-native-integration-with-rillet-the-ai-native-oqr7d3dnej9f.html
-- https://finance.yahoo.com/technology/ai/articles/expensify-launches-native-integration-rillet-130000534.html
 
 ## Data gaps
 

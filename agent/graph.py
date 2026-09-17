@@ -5,12 +5,13 @@
 #   discover ──found──────────────> confirm_competitors (human checks the list)
 #      │                                   │
 #      ├─ambiguous / not_found─> clarify ──┘ back to discover (at most 2 clarifications)
+#      ├─error (a tool failed)───────────────> handoff (say which service failed) ─> END
 #      └─still stuck after 2 clarifications──> handoff (explain what failed) ─> END
 #
-#   confirm_competitors -> gather -> extract ──no data at all──> handoff ─> END
-#                                       └─some data─> write_brief -> approve_brief (human reads it)
+#   confirm_competitors -> gather -> extract ──no real findings──> handoff ─> END
+#                                       └─findings─> write_brief -> approve_brief (human reads it)
 #
-#   approve_brief ──"approve"──> save_brief -> END
+#   approve_brief ──"approve"/"yes"──> save_brief -> END
 #                 └─anything else──> END (not saved)
 #
 # "Human" steps pause the graph with interrupt(). The runner shows the question,
@@ -38,6 +39,19 @@ RECURSION_LIMIT = 25
 
 # Where approved briefs are saved.
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "outputs"
+
+# Answers that mean "keep the competitor list as it is".
+ACCEPT_ANSWERS = {"", "y", "yes", "ok", "accept"}
+
+# Answers that mean approve / reject at the final brief check.
+APPROVE_ANSWERS = {"approve", "approved", "yes", "y"}
+REJECT_ANSWERS = {"reject", "no", "n"}
+
+
+def _has_real_findings(state, name):
+    """True if extraction produced actual findings for this competitor (not a "not available" placeholder)."""
+    pricing = state.get("findings", {}).get(name, {}).get("pricing", "not available")
+    return not str(pricing).startswith("not available")
 
 
 def _log(message):
@@ -69,12 +83,14 @@ def confirm_competitors(state):
         "message": f"Competitors found: {', '.join(competitors)}\n"
         "Press Enter to accept, or type a comma-separated list to replace them.",
     })
+    # Enter, "y", "yes", "ok" or "accept" (any case) keeps the list as it is.
+    if str(answer).strip().lower() in ACCEPT_ANSWERS:
+        _log("human accepted competitors")
+        return {"competitors": competitors}
+    # Anything else is read as a comma-separated replacement list.
     replacement = [name.strip() for name in str(answer).split(",") if name.strip()]
-    if replacement:
-        _log(f"human replaced competitors -> {', '.join(replacement)}")
-        return {"competitors": replacement}
-    _log("human accepted competitors")
-    return {"competitors": competitors}
+    _log(f"human replaced competitors -> {', '.join(replacement)}")
+    return {"competitors": replacement}
 
 
 def approve_brief(state):
@@ -84,7 +100,13 @@ def approve_brief(state):
         "brief": state.get("brief", ""),
         "message": 'Type "approve" to save this brief, or "reject" to discard it.',
     })
-    return {"human_decision": str(answer).strip().lower()}
+    # Turn the many ways of saying yes/no into exactly "approve" or "reject".
+    decision = str(answer).strip().lower()
+    if decision in APPROVE_ANSWERS:
+        decision = "approve"
+    elif decision in REJECT_ANSWERS:
+        decision = "reject"
+    return {"human_decision": decision}
 
 
 # ---------- Final steps ----------
@@ -109,17 +131,32 @@ def handoff(state):
     """Explain clearly what went wrong and what the human should do next."""
     print("\n" + "=" * 60)
     print("HANDOFF: the agent couldn't finish on its own.")
-    if state.get("discovery_status") != "found":
+    errors_text = " ".join(state.get("errors", []))
+    raw_results = state.get("raw_results", {})
+    if state.get("discovery_status") == "error":
+        # A tool broke during discovery: say which one, not "describe the company better".
+        if "discovery search failed" in errors_text:
+            print("What failed: the You.com search service, while looking for competitors.")
+            print("What to do: check YDC_API_KEY in .env and your internet connection, then run again.")
+        else:
+            print("What failed: the OpenAI service, while analysing the search results.")
+            print("What to do: check OPENAI_API_KEY in .env and your internet connection, then run again.")
+    elif state.get("discovery_status") != "found":
         print(f"What failed: couldn't identify competitors for \"{state['company']}\" "
               f"after {state.get('clarify_attempts', 0)} clarification(s).")
         if state.get("human_question"):
             print(f"Last open question: {state['human_question']}")
         print("What to do: run again with a more specific description, e.g. the company's "
               "industry, product or website.")
-    else:
-        print("What failed: no search data could be gathered for any competitor.")
+    elif not any(raw_results.get(n, {}).get("product") or raw_results.get(n, {}).get("news")
+                 for n in state.get("competitors", [])):
+        print("What failed: searching (You.com): no search data could be gathered for any competitor.")
         print("What to do: check YDC_API_KEY in .env and your internet connection "
               "(and that the --fail demo flag isn't set), then run again.")
+    else:
+        # We had search data, but the LLM couldn't turn it into findings for anyone.
+        print("What failed: extraction (OpenAI): search data was gathered, but no findings could be extracted.")
+        print("What to do: check OPENAI_API_KEY in .env and your internet connection, then run again.")
     errors = state.get("errors", [])
     if errors:
         print("Errors recorded:")
@@ -138,6 +175,10 @@ def route_after_discovery(state):
     if status == "found":
         _log(f"discovery found -> asking human to confirm {len(state.get('competitors', []))} competitors")
         return "confirm_competitors"
+    if status == "error":
+        # A tool failed: asking the human to clarify the company wouldn't help.
+        _log("discovery error (a tool failed) -> handoff")
+        return "handoff"
     if state.get("clarify_attempts", 0) >= MAX_CLARIFY_ATTEMPTS:
         _log(f"discovery {status} after {MAX_CLARIFY_ATTEMPTS} clarifications -> handoff")
         return "handoff"
@@ -146,14 +187,10 @@ def route_after_discovery(state):
 
 
 def route_after_extraction(state):
-    """Write a brief if at least one competitor has data; otherwise hand off."""
-    raw_results = state.get("raw_results", {})
-    with_data = [
-        name for name in state.get("competitors", [])
-        if raw_results.get(name, {}).get("product") or raw_results.get(name, {}).get("news")
-    ]
+    """Write a brief only if at least one competitor has real extracted findings; otherwise hand off."""
+    with_data = [name for name in state.get("competitors", []) if _has_real_findings(state, name)]
     if not with_data:
-        _log("no competitor has any data -> handoff")
+        _log("no competitor has extracted findings -> handoff")
         return "handoff"
     _log(f"data for {len(with_data)}/{len(state.get('competitors', []))} competitors -> writing brief")
     return "write_brief"

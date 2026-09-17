@@ -313,3 +313,35 @@ Limit yourself to 2 fix rounds. Then log, commit and push.
 ```
 
 **Result:** Worked; 1 of 2 fix rounds used. (1) When context is set, the retry query keeps it (code replaces an LLM query without it); the prompt says competitors must match the context. Verified with a forced not_enough_info: the retry was "Ramp corporate card and spend management alternatives". (2) MAX_SEARCHES is 20. (3) page_age is kept as "date" and passed to the extractor as "published:"; verified a 2024 item gets is_old=true and an undated item "not found". Regenerated briefs: Ramp -> Brex, Airwallex, Expensify (8/8 news dated); Mercury -> clarified, then Brex, Rho, Grasshopper Bank (8/8); Ramp with Brex failing -> Airwallex, Expensify (6/6), Brex in Data gaps. Before this round almost no news had dates. Fix round 1: dates came back mixed (some with times), so code now trims them to YYYY-MM-DD. Not seen in real runs: discovery's retry (it found competitors on the first try every time) and old news (freshness=month only returns recent items). graph.py, brief.py and main.py unchanged.
+
+---
+
+## Code-review bug fixes: tool errors, confirm/approve answers, extraction routing, news quality
+
+**Time:** 2026-09-16 21:35
+
+```
+Final bug-fix round from a code review. Fix only these five issues, keep changes minimal and commented. Don't change anything else.
+
+1. Tool failure in discovery: when the You.com search or the LLM call fails inside discover(), set discovery_status="error" (not "not_found"). In graph.py, route "error" straight to handoff (no clarify). The handoff message for this case must say which service failed and to check the API key / internet, not ask for a better company description.
+
+2. Confirm step (graph.py confirm_competitors): treat "", "y", "yes", "ok", "accept" (any case) as accepting the list. Only anything else is parsed as a comma-separated replacement.
+
+3. Approval: in graph.py normalise "approve", "approved", "yes", "y" -> approve; "reject", "no", "n" -> reject. In main.py, if the answer is none of those, print "Please type approve or reject" and ask again instead of discarding the brief.
+
+4. route_after_extraction: go to write_brief only if at least one competitor has real extracted findings (not the "not available: ..." placeholder). Otherwise go to handoff, with a message that says whether searching or extraction (OpenAI) failed.
+
+5. News quality:
+   - In researcher.py, tag every item that came from You.com's news list with "from_news": True (web items False).
+   - In extractor.py, only keep a news item if its source result has from_news True (in addition to the existing checks).
+   - In extractor.py, set each kept news item's date from the source result's "date" field in CODE (YYYY-MM-DD, or "not found"), ignoring the LLM's date, and compute is_old in code (more than 365 days before today).
+   - Accept that some competitors will show "no recent news found".
+
+Tests:
+- Add scripts/test_edge_cases.py that uses fakes (no API calls) to check bugs 1-4: You.com failing during discovery goes straight to handoff; typing "yes" at confirm keeps the list; "yes" at approval saves; all extractions failing goes to handoff. Print PASS/FAIL per case.
+- Then re-run scripts/test_graph.py to regenerate the three briefs. Show me the edge-case results, the log lines, and the Recent news sections of all three briefs.
+
+Limit yourself to 2 fix rounds. Then log, commit and push.
+```
+
+**Result:** Worked; 0 of 2 fix rounds used. Edge cases 4/4 PASS with fakes (run with invalid API keys, so no real calls were possible). The main.py re-ask was checked with piped input ("maybe" -> "Please type approve or reject" -> "Approved" accepted). Regenerated briefs: Ramp -> Brex, Airwallex, Expensify (news only for Airwallex: 3 Fortune articles, dated); Mercury -> clarified, then the retry kept the context -> Aspire, Brex, Ramp (no news for any); Ramp with Brex failing -> Airwallex 3 news, Expensify none, Brex "not available". Checked why news is so sparse: You.com's news list for Brex/Aspire/Ramp had no item naming the competitor (Brexit, NBA, general fintech), and Expensify had no news-list items, so "no recent news found" is correct. Trade-off: real Expensify press releases (listed by You.com as web) are now excluded, and the extractor LLM, unaware of from_news, still picks web items that code drops ("dropped 6"). Only comments added beyond the five fixes (state.py status list, graph.py diagram).

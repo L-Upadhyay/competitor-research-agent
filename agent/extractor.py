@@ -146,13 +146,15 @@ def extract(state):
 
         # Safety check 1: news must come from a real result that names the competitor
         # as a whole word (so a "Brexit" article doesn't count as news about "Brex"),
-        # and must not be a paid "Sponsored" advert.
+        # must not be a paid "Sponsored" advert, and must come from You.com's news list
+        # (not an ordinary web page such as a pricing page or review).
         name_pattern = re.compile(rf"\b{re.escape(competitor)}\b", re.IGNORECASE)
         news, rejected_urls = [], set()
         for item in result.recent_news:
             source = results_by_url.get(item.url)
             if (
                 source
+                and source.get("from_news")
                 and name_pattern.search(f"{source['title']} {source['snippet']}")
                 and "sponsored" not in source["title"].lower()
             ):
@@ -161,10 +163,17 @@ def extract(state):
                 rejected_urls.add(item.url)
         dropped = len(rejected_urls)
         news = news[:MAX_NEWS]
-        # Show dates as plain YYYY-MM-DD (You.com sometimes adds a time, e.g. "2026-09-01T13:00:00").
+
+        # Dates are set by code from You.com's publish date, not by the LLM, so they can't be
+        # borrowed or invented. is_old = published more than 365 days before today.
         for item in news:
-            if re.match(r"\d{4}-\d{2}-\d{2}T", item.date):
-                item.date = item.date[:10]
+            published = results_by_url[item.url].get("date") or ""
+            if re.match(r"\d{4}-\d{2}-\d{2}", published):
+                item.date = published[:10]
+                item.is_old = (date.today() - date.fromisoformat(item.date)).days > 365
+            else:
+                item.date = "not found"
+                item.is_old = False
 
         # Safety check 2: sources must be real result links, and not a news item we just rejected.
         # News links we kept are always listed as sources.

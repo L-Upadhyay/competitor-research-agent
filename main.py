@@ -18,6 +18,15 @@ def ask_human(payload):
         print("=" * 60)
     print(payload.get("message", "The agent needs your input."))
     prompt = {"clarify": "Your answer: ", "confirm_competitors": "Competitors: ", "approve_brief": "approve / reject: "}
+    if kind == "approve_brief":
+        # Keep asking until the answer is clearly approve or reject, so a typo doesn't discard the brief.
+        from agent.graph import APPROVE_ANSWERS, REJECT_ANSWERS
+
+        while True:
+            answer = input(prompt[kind])
+            if answer.strip().lower() in APPROVE_ANSWERS | REJECT_ANSWERS:
+                return answer
+            print("Please type approve or reject")
     return input(prompt.get(kind, "> "))
 
 
