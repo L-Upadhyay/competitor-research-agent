@@ -65,6 +65,9 @@ Rules:
   The result's title or snippet must mention {competitor} by name. Drop anything about
   other topics or similarly named things (for example "Brexit" is not about "Brex"),
   and drop sponsored or advertising content.
+- Prefer results labelled [news article]. A [web page] may count as news ONLY if it is a
+  dated press release or news story about {competitor}; never a pricing page, review,
+  comparison or "alternatives" list, or a company profile page.
 - For each news item, set date to that result's "published:" date (as YYYY-MM-DD).
   If the result says "published: not found", write "not found". Don't take dates
   from other results.
@@ -89,8 +92,27 @@ def _format_results(entry):
         for item in entry.get(section, []):
             # The publish date comes from You.com; some results don't have one.
             date_line = f"published: {item['date']}" if item.get("date") else "published: not found"
-            lines.append(f"- [{section}] {item['title']}\n  {item['url']}\n  {date_line}\n  {item['snippet']}")
+            # Tell the LLM whether You.com listed this as a news article or an ordinary web page.
+            label = "[news article]" if item.get("from_news") else "[web page]"
+            lines.append(f"- {label} {item['title']}\n  {item['url']}\n  {date_line}\n  {item['snippet']}")
     return "\n".join(lines)
+
+
+# Web pages whose link or title contains any of these are never treated as news
+# (profiles, review sites, pricing pages, comparisons).
+NOT_NEWS_MARKERS = [
+    "wikipedia.org", "linkedin.com", "crunchbase", "g2.com", "capterra", "trustradius",
+    "pricing", "review", "alternatives", " vs ", "competitors", "comparison",
+]
+
+
+def _is_news_like_web_page(source):
+    """True for an ordinary web page that could be a news story: it has a publish date
+    and its link/title doesn't look like a profile, review, pricing or comparison page."""
+    if source.get("from_news") or not source.get("date"):
+        return False
+    text = f"{source['url']} {source['title']}".lower()
+    return not any(marker in text for marker in NOT_NEWS_MARKERS)
 
 
 def _placeholder(message, complete=False):
@@ -146,15 +168,15 @@ def extract(state):
 
         # Safety check 1: news must come from a real result that names the competitor
         # as a whole word (so a "Brexit" article doesn't count as news about "Brex"),
-        # must not be a paid "Sponsored" advert, and must come from You.com's news list
-        # (not an ordinary web page such as a pricing page or review).
+        # must not be a paid "Sponsored" advert, and must be either a You.com news
+        # article or a dated web page that looks like a news story (see _is_news_like_web_page).
         name_pattern = re.compile(rf"\b{re.escape(competitor)}\b", re.IGNORECASE)
         news, rejected_urls = [], set()
         for item in result.recent_news:
             source = results_by_url.get(item.url)
             if (
                 source
-                and source.get("from_news")
+                and (source.get("from_news") or _is_news_like_web_page(source))
                 and name_pattern.search(f"{source['title']} {source['snippet']}")
                 and "sponsored" not in source["title"].lower()
             ):

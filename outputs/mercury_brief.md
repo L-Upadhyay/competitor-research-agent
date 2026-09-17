@@ -2,74 +2,79 @@
 
 _Context: the fintech business bank for startups_
 
-_Generated 2026-09-16 · Competitors: Aspire, Brex, Ramp_
+_Generated 2026-09-16 · Competitors: Brex, Rho, Grasshopper Bank_
 
 ## Executive summary
 
-Aspire positions itself as a free, all-in-one fintech business account tailored for startups and SaaS companies, emphasizing compliance, encryption, and banking services through FDIC-insured partners, with pricing based on company size and complexity but no user limits. Brex differentiates by offering a tiered pricing model across three plans, focusing on speed and control for managing spend in real time, with costs scaling by active employees and increasing with higher-tier plans. Ramp presents itself as a spend-management and banking solution with strong card-level controls and fee-free banking features, though specific pricing details beyond custom estimates are unavailable. While Aspire offers a free base plan with a single license fee, Brex and Ramp both use per-employee pricing models, with Brex providing more transparency in its structure. None of the competitors have recent news available in the provided findings.
-
-## Aspire
-
-**Pricing:** USD $0/month, only pay for what you use; Aspire has 1 pricing edition that costs $0; pricing varies based on company size, complexity, and what solution best fits your business; a single license fee is billed monthly and gives access to all contracted functionality; there is no limit to the number of users; price is protected through the term of the contract.
-
-**Core features:**
-- strict compliance standards
-- advanced encryption technology
-- Deposit Account and banking services provided by Column N.A., Member FDIC
-- FDIC deposit insurance through Column N.A., Member FDIC and Column’s Sweep Program Network Banks
-- single license fee billed monthly with access to all contracted functionality
-
-**Positioning:** Aspire is presented as a fintech business account for startups and SaaS businesses, with a free Basic plan and quick onboarding. It is pitched as an all-in-one fintech account that is accessible for early-stage businesses and scales with company size and complexity.
-
-**Recent news:**
-_no recent news found_
-
-**Sources:**
-- https://aspireapp.com/us/pricing
-- https://www.g2.com/products/aspire-aspire/pricing
-- https://www.youraspire.com/aspire-plans
+Brex positions itself as an intelligent finance platform built for speed and control, targeting startups to enterprises with a focus on real-time spend management across corporate cards, banking, and expense tools. Rho differentiates by offering a fully bundled, $0 subscription platform with integrated business banking, payables, and treasury tools, specifically tailored for high-growth, venture-backed startups. Grasshopper Bank emphasizes its identity as a real chartered bank with a digital-first approach, offering fast funding and corporate banking services, though its pricing details are not available. While Brex scales pricing based on employee count with tiered plans and free access for qualifying startups, Rho’s zero-cost model stands out as a key differentiator, and Brex recently announced a new loyalty perk in partnership with American Express. Rho has been active in the news with a $75 million Series B funding round and multiple feature spotlights in startup banking rankings, while Grasshopper Bank has not shared recent public updates.
 
 ## Brex
 
-**Pricing:** Brex has 3 different plans. Brex Essentials is $0 per user each month. Pricing scales primarily with the number of active employees (cardholders and non-cardholders who use the platform), with per-employee rates often decreasing at higher volumes (for example, 100+ employees and 500+ employees). Moving from Essentials to Premium or Enterprise increases per-employee costs.
+**Pricing:** Brex has 3 different plans. Brex Essentials plan is $0 per user each month. Pricing scales primarily with the number of active employees (cardholders and non-cardholders who use the platform), and pricing tiers/per-employee rates often decrease at higher volumes (e.g., 100+ employees, 500+ employees). Moving from Essentials to Premium or Enterprise increases per-employee costs, and the free tier is described as generous for qualifying startups.
 
 **Core features:**
-- corporate cards
-- banking/business accounts
-- expenses and spend management
-- bill pay and reimbursements
-- travel and finance automation
+- Corporate cards
+- Business accounts / banking
+- Spend management
+- Expense management
+- Bill pay
 
-**Positioning:** Brex is positioned as an intelligent finance platform for startups through global enterprises, built for speed and control. It pitches itself as a way for founders and finance teams to manage spend in one place in real time.
+**Positioning:** Brex is positioned as an intelligent finance platform built for speed and control, for founders and finance teams. It targets startups through global enterprises and emphasizes managing spend in one place in real time.
 
 **Recent news:**
-_no recent news found_
+- [American Express Business Savings Launches with Loyalty Perk Fintech ...](https://www.techtimes.com/articles/327621/20260916/american-express-business-savings-launches-loyalty-perk-fintech-banks-cannot-match.htm) — 2026-09-16
 
 **Sources:**
 - https://www.hoppier.com/blog/brex-review
 - https://www.vendr.com/marketplace/brex
+- https://www.techtimes.com/articles/327621/20260916/american-express-business-savings-launches-loyalty-perk-fintech-banks-cannot-match.htm
 
-## Ramp
+## Rho
 
-**Pricing:** Ramp has 3 different plans. Pricing details beyond that are not found in the results; one result says buyers should get a custom price estimate, but no explicit plan prices are stated.
+**Pricing:** All features are bundled at $0 subscription cost. Rho’s pricing page says it keeps things simple and helps you save money that you can invest into your business.
 
 **Core features:**
-- Spend management at the card level
-- Business bank account with no minimum balance, opening fees, or maintenance fees
-- Unlimited free Same-Day ACH
-- Free domestic and international wires via Ramp Bill Pay
-- Auto top-up from linked checking accounts with target balance automation and low balance alerts
+- Business checking accounts
+- Corporate credit cards
+- Accounts payable automation
+- Expense management
+- Treasury management
 
-**Positioning:** Ramp says it is designed to save startups, global enterprises, and companies in between time and money. The results position it as a fintech business banking and spend-management product with card-level controls and banking features.
+**Positioning:** Rho is positioned as an all-in-one financial platform for businesses, especially venture-backed startups and high-growth companies. It pitches integrated tools to streamline business finances, with business checking, cards, payables, expenses, and treasury in one place.
+
+**Recent news:**
+- [Finance management platform Rho raises $75m in Series B round](https://www.fintechfutures.com/baas/finance-management-platform-rho-raises-75m-in-series-b-round) — 2026-08-21
+- [Best Banks for Seed-Stage Startups (2026) | Rho](https://www.rho.co/blog/best-banks-for-seed-stage-startups) — 2026-08-26
+- [Best Banks for Startup Business Banking in 2026 | Rho](https://www.rho.co/blog/best-startup-banks) — 2026-08-26
+
+**Sources:**
+- https://www.rho.co/pricing
+- https://checkthat.ai/brands/rho/pricing
+- https://www.getapp.com/finance-accounting-software/a/rho/
+- https://www.fintechfutures.com/baas/finance-management-platform-rho-raises-75m-in-series-b-round
+- https://www.rho.co/blog/best-banks-for-seed-stage-startups
+- https://www.rho.co/blog/best-startup-banks
+
+## Grasshopper Bank
+
+**Pricing:** not found
+
+**Core features:**
+- award-winning digital banking platform
+- banking for corporate and end-client needs
+- up to $200,000 funding within one business day for Grasshopper business banking clients
+- daily balance method for calculating interest on deposit accounts
+- digital-first banking
+
+**Positioning:** Grasshopper Bank is presented as a digital bank for modern business and corporate/end-client banking needs. It also pitches itself as a real chartered bank serving startups directly, rather than a fintech platform with partner banks.
 
 **Recent news:**
 _no recent news found_
 
 **Sources:**
-- https://www.capterra.com/p/207081/Ramp/pricing/
-- https://www.vendr.com/marketplace/ramp
-- https://www.headwestguide.com/tools/ramp
-- https://ramp.com/pricing
+- https://www.grasshopper.bank/
+- https://www.grasshopper.bank/banking-solutions/business-banking-features/
+- https://www.rho.co/blog/best-startup-banks
 
 ## Data gaps
 
@@ -77,4 +82,4 @@ none
 
 ---
 
-_Searches used: 9 · Summary model: Nebius Qwen/Qwen3-30B-A3B-Instruct-2507_
+_Searches used: 8 · Summary model: Nebius Qwen/Qwen3-30B-A3B-Instruct-2507_

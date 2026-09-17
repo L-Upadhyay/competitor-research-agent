@@ -345,3 +345,25 @@ Limit yourself to 2 fix rounds. Then log, commit and push.
 ```
 
 **Result:** Worked; 0 of 2 fix rounds used. Edge cases 4/4 PASS with fakes (run with invalid API keys, so no real calls were possible). The main.py re-ask was checked with piped input ("maybe" -> "Please type approve or reject" -> "Approved" accepted). Regenerated briefs: Ramp -> Brex, Airwallex, Expensify (news only for Airwallex: 3 Fortune articles, dated); Mercury -> clarified, then the retry kept the context -> Aspire, Brex, Ramp (no news for any); Ramp with Brex failing -> Airwallex 3 news, Expensify none, Brex "not available". Checked why news is so sparse: You.com's news list for Brex/Aspire/Ramp had no item naming the competitor (Brexit, NBA, general fintech), and Expensify had no news-list items, so "no recent news found" is correct. Trade-off: real Expensify press releases (listed by You.com as web) are now excluded, and the extractor LLM, unaware of from_news, still picks web items that code drops ("dropped 6"). Only comments added beyond the five fixes (state.py status list, graph.py diagram).
+
+---
+
+## News fix: label results, allow dated news-like web pages
+
+**Time:** 2026-09-16 21:51
+
+```
+One more fix, news only. Keep it minimal and commented. Don't change any other behaviour.
+
+1. extractor.py _format_results: label each result as "[news article]" if from_news is True, else "[web page]".
+2. Extractor prompt: prefer news articles. A web page may count as news ONLY if it is a dated press release or news story about the competitor, never a pricing page, review, comparison or "alternatives" list, or a company profile page.
+3. Code check in extractor.py, replacing the from_news-only rule. Keep a news item if its source is a real result that names the competitor as a whole word, is not sponsored, AND either:
+   a) from_news is True, or
+   b) it is a web result that has a publish date AND its URL/title does not contain any of: wikipedia.org, linkedin.com, crunchbase, g2.com, capterra, trustradius, pricing, review, alternatives, " vs ", competitors, comparison.
+   Dates and is_old stay computed in code from the source result.
+4. Re-run scripts/test_edge_cases.py (must still be 4/4 PASS) and scripts/test_graph.py. Show me the Recent news sections of all three briefs.
+
+Limit yourself to 2 fix rounds. Then log, commit and push.
+```
+
+**Result:** Worked; 0 of 2 fix rounds used. Edge cases still 4/4 PASS. News improved: Ramp brief -> Brex 1, Airwallex 3 (Fortune), Expensify 3 press releases back (Claude, Rillet); Mercury brief -> Brex 1, Rho 3 (incl. $75m Series B), Grasshopper Bank none; Ramp with Brex failing -> Airwallex 3, BILL Spend & Expense none. All dates from You.com's publish date. Still off (blocklist kept exactly as specified): Rho's own blog listicles "Best Banks for Startup Business Banking in 2026" and "Best Banks for Seed-Stage Startups" pass as news; "Brex Benchmark" is a Brex blog post; the Brex item in the Mercury brief is an American Express story that mentions Brex. Markers like "best " or "/blog" would catch most of these.

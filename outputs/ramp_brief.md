@@ -6,11 +6,11 @@ _Generated 2026-09-16 · Competitors: Brex, Airwallex, Expensify_
 
 ## Executive summary
 
-Brex positions itself as an all-in-one corporate card and spend management platform tailored for startups and scaling businesses, offering integrated card issuance, expense management, travel, bill pay, and business accounts across its subscription tiers. Airwallex differentiates by emphasizing its global financial infrastructure, targeting businesses with international needs through multi-currency accounts, cross-border transfers, and enterprise-grade spend controls, while recently signaling strategic moves toward becoming IPO-ready and exploring stablecoins. Expensify focuses on simplifying expense tracking for individuals, freelancers, and small teams, with a free tier that supports unlimited SmartScans and receipt automation, though its pricing is based on scan limits rather than user count. Pricing structures vary significantly: Brex scales with employee count and offers a free tier, Airwallex has a free plan tied to deposit volume and charges per legal entity, while Expensify’s free plan lacks workspace features and limits are scan-based. Notably, Airwallex has been actively expanding into autonomous finance and stablecoins, reflecting a broader strategic evolution, whereas Brex and Expensify have no recent news available.
+Brex positions itself as a corporate card and spend management platform tailored for startups and scaling companies, integrating cards, accounts payable, and workflow tools into a unified system. Airwallex differentiates by focusing on cross-border payments and global financial operations, offering tiered plans with increasing capabilities for advanced finance teams, including dedicated support and multi-conditional approvals. Expensify emphasizes expense management and automation across businesses of all sizes, with a free tier for individuals and recent moves to integrate AI-powered tools like Claude and Rillet. While Brex and Airwallex both offer corporate cards and spend controls, Brex’s pricing scales with employee count and includes a free tier, whereas Airwallex’s Free plan requires a minimum deposit or balance, with no clear USD pricing stated. Expensify’s pricing is not available in the findings, but its recent news highlights a strong push into AI-driven expense and ERP integrations, signaling a shift toward intelligent automation.
 
 ## Brex
 
-**Pricing:** Brex offers 3 subscription plans. Brex Essentials is $0 per user each month. The other results indicate there are Premium and Enterprise tiers, with pricing that scales primarily with the number of active employees and per-employee rates that often decrease at higher volumes (for example, 100+ employees and 500+ employees).
+**Pricing:** Brex offers three subscription plans. The Brex Essentials plan is $0 per user each month; results also mention Premium and Enterprise tiers, but no exact prices are stated. One result says pricing scales primarily with the number of active employees (cardholders and non-cardholders who use the platform), with per-employee rates often decreasing at higher volumes (e.g., 100+ employees, 500+ employees).
 
 **Core features:**
 - Corporate cards
@@ -19,33 +19,36 @@ Brex positions itself as an all-in-one corporate card and spend management platf
 - Travel
 - Bill pay and business accounts
 
-**Positioning:** Brex is positioned as a corporate card and spend management platform for startups, scaling companies, and growing businesses. The results describe it as an all-in-one workflow that combines card issuance, spend controls, expense management, travel, bill pay, and business accounts.
+**Positioning:** Brex is positioned as a corporate card and spend management platform for startups and scaling companies. It combines corporate cards, accounts payable, and spend management into one system, aiming to make company spending easier with integrated workflow tools.
 
 **Recent news:**
-_no recent news found_
+- [Brex Benchmark: Top 25 Fastest Growing Startups of Summer 2026](https://www.brex.com/journal/brex-benchmark-articles/top-25-fastest-growing-startups-of-summer-2026) — 2026-08-24
 
 **Sources:**
 - https://www.brex.com/pricing
-- https://www.hoppier.com/blog/brex-review
 - https://www.vendr.com/marketplace/brex
+- https://www.hoppier.com/blog/brex-review
+- https://www.forbes.com/advisor/credit-cards/intelligent-finance-era-is-here-what-to-know-about-brexs-corporate-card-and-ai-native-spend-management-sponsored/
+- https://www.investing.com/news/transcripts/capital-one-at-barclays-conference-growth-bets-stay-on-track-93CH-4904188
+- https://www.brex.com/journal/brex-benchmark-articles/top-25-fastest-growing-startups-of-summer-2026
 
 ## Airwallex
 
-**Pricing:** Airwallex uses a tiered subscription model with three plans. One plan is free if you deposit £10k/month or hold a £10k balance; monthly fees are charged per business legal entity (not per account), and all prices exclude VAT. The results do not list the exact prices for the other two plans.
+**Pricing:** Three plans in a tiered subscription model: Free, Advanced, and Enterprise. Free is free if you deposit £10k/month or hold a £10k balance; monthly fees are charged per business legal entity and exclude VAT. The official pricing page is in USD, but no specific USD plan prices are stated in the results.
 
 **Core features:**
 - Core global accounts and transfers
 - Advanced spend controls
-- 50 company cards
+- Company cards (50 company cards on Advanced; unlimited cards on Enterprise)
 - Multi-conditional approvals
-- Enterprise features with a dedicated account manager and unlimited cards
+- Dedicated account manager on Enterprise
 
-**Positioning:** Airwallex is positioned as a business finance platform with tiered plans that cover global accounts, transfers, and spend management. The results also describe it as a spend platform built on its own global financial infrastructure, with multi-currency and international card capabilities.
+**Positioning:** Airwallex is positioned as a cross-border payments and spend platform for businesses. The results emphasize global accounts, spend controls, company cards, and international payments, with higher tiers aimed at more advanced finance teams.
 
 **Recent news:**
 - [Airwallex president Lucy Liu on the company’s plans to be ‘IPO-ready’ | Fortune](https://fortune.com/2026/08/31/airwallex-president-lucy-liu-ipo-plans/) — 2026-08-31
 - [Airwallex expands from cross-border payments to autonomous finance—though president Lucy Liu says it’s still ‘not the best time’ for an IPO | Fortune](https://fortune.com/article/airwallex-fundraise-lucy-liu-ai-fintech-ipo-08-20-2026/) — 2026-08-20
-- [Airwallex is the latest giant company to plow into stablecoins—even as the business case for them is still emerging.](https://fortune.com/2026/08/31/who-will-use-stablecoins-airwallex-dan-kim/) — 2026-08-31
+- [Stablecoins are crypto's killer app—but no one can agree on who will use them | Fortune](https://fortune.com/2026/08/31/who-will-use-stablecoins-airwallex-dan-kim/) — 2026-08-31
 
 **Sources:**
 - https://www.wearefounders.uk/airwallex-pricing-2026-every-plan-fee-and-hidden-cost-explained/
@@ -55,25 +58,28 @@ _no recent news found_
 
 ## Expensify
 
-**Pricing:** The free tier provides individual expense tracking without any workspace features. It includes unlimited SmartScans (no monthly cap), distance tracking, manual expense entry, and export to CSV or spreadsheet formats. Receipts can also be forwarded to receipts@expensify.com for automatic scanning. Expensify price plans have limits based on SmartScans, not on the number of persons.
+**Pricing:** not found
 
 **Core features:**
-- Unlimited SmartScans
-- Distance tracking
-- Manual expense entry
-- Export to CSV or spreadsheet formats
-- Receipt forwarding for automatic scanning
+- free tier for individual expense tracking without workspace features
+- unlimited SmartScans with no monthly cap
+- distance tracking
+- manual expense entry
+- export data to CSV or spreadsheet formats
 
-**Positioning:** Expensify is positioned for individuals, freelancers, and businesses that need to track expenses, and it emphasizes simplifying expense workflows. The results also describe it as a tool for managing expenses, travel, and corporate cards.
+**Positioning:** Expensify is presented as expense management software for businesses of all sizes, with a free tier for individual expense tracking. It also pitches itself as a way to manage expenses, travel, and corporate cards, with integrations that automate expense management and spend insights.
 
 **Recent news:**
-_no recent news found_
+- [Expensify Adds Anthropic Integration to Claude | EXFY Stock News](https://www.stocktitan.net/news/EXFY/expensify-becomes-one-of-the-first-expense-management-tools-5qgy05a1s0ex.html) — 2026-09-15
+- [Expensify Launches Rillet AI ERP Integration | EXFY Stock News](https://www.stocktitan.net/news/EXFY/expensify-launches-native-integration-with-rillet-the-ai-native-oqr7d3dnej9f.html) — 2026-09-01
+- [Expensify Launches Native Integration with Rillet, the AI-Native ERP](https://finance.yahoo.com/technology/ai/articles/expensify-launches-native-integration-rillet-130000534.html) — 2026-09-01
 
 **Sources:**
-- https://www.expensify.com/pricing
 - https://checkthat.ai/brands/expensify/pricing
-- https://www.trustradius.com/products/expensify/pricing
 - https://www.spendflo.com/blog/expensify-pricing-guide
+- https://www.stocktitan.net/news/EXFY/expensify-becomes-one-of-the-first-expense-management-tools-5qgy05a1s0ex.html
+- https://www.stocktitan.net/news/EXFY/expensify-launches-native-integration-with-rillet-the-ai-native-oqr7d3dnej9f.html
+- https://finance.yahoo.com/technology/ai/articles/expensify-launches-native-integration-rillet-130000534.html
 
 ## Data gaps
 
