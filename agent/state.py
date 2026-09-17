@@ -12,6 +12,20 @@ class AgentState(TypedDict):
     # The company we are researching competitors for, e.g. "Ramp".
     company: str
 
+    # Optional extra detail from the human to pin down which company they mean,
+    # e.g. "the fintech bank". Empty if not needed.
+    company_context: str
+
+    # How the discovery step went:
+    #   "found"      - we have a list of competitors
+    #   "ambiguous"  - the company name could mean more than one company
+    #   "not_found"  - we couldn't find enough information
+    discovery_status: str
+
+    # A question for the human when the agent is stuck and needs their help,
+    # e.g. "Did you mean Mercury the bank or Mercury Insurance?"
+    human_question: str
+
     # Names of the competitors the discovery step found, e.g. ["Brex", "Mercury"].
     competitors: list[str]
 

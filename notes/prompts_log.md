@@ -139,3 +139,42 @@ From now on, after finishing each task, append the exact prompt I sent you to no
 ```
 
 **Result:** Worked. Added this log with all earlier prompts from the session in order; from now on each task's prompt is logged and included in its commit.
+
+---
+
+## Discovery agent (Agent 1)
+
+**Time:** 2026-09-16 20:52
+
+```
+Next component: agent/discovery.py (Agent 1). Keep it simple and well commented for a non-coder.
+
+1. Add these fields to AgentState in agent/state.py:
+   company_context (str): an optional clarification from the human, e.g. "the fintech bank"
+   discovery_status (str): "found" | "ambiguous" | "not_found"
+   human_question (str): the question for the human when the agent needs help
+
+2. Model setup: use ChatOpenAI from langchain-openai with an inexpensive current OpenAI mini model. Verify the model name actually works with one quick call before using it. Put the model name in one constant at the top of a new file agent/llm.py so all agents share it. Read OPENAI_API_KEY from .env. temperature=0.
+
+3. agent/discovery.py: a function discover(state) -> dict with state updates.
+   - Search with search_you: "{company} {company_context} competitors" (count 5).
+   - If the search returns ok=False, record the error in state["errors"] and set discovery_status="not_found" with a human_question explaining what failed.
+   - Otherwise send the results to the LLM with structured output (a Pydantic model) returning:
+     status: "found" | "ambiguous" | "not_enough_info"
+     competitors: list of up to 3 company names (only when found)
+     question: a short question for the human (only when ambiguous)
+     better_query: an improved search query (only when not_enough_info)
+   - The prompt must tell the LLM: use only the search results, don't invent companies, and pick "ambiguous" if the name could refer to more than one company.
+   - If not_enough_info: run ONE more search with better_query and ask the LLM again. If it's still not found, set discovery_status="not_found" with a human_question asking for more context.
+   - Increment search_count for every search.
+   - Print one short log line per step, e.g. "[discovery] searching: ...", "[discovery] decision: found -> Brex, Mercury, Navan".
+
+4. Create scripts/test_discovery.py and run 3 cases, printing the returned state updates:
+   a) company="Ramp", company_context="corporate card and spend management"
+   b) company="Mercury", company_context=""  (expect ambiguous)
+   c) company="Zxqvtrbl Labs", company_context=""  (expect not_found after a retry)
+
+Run it, show me the output, then log, commit and push.
+```
+
+**Result:** Worked after several fixes; all 3 cases now match expectations. Model: gpt-5.4-mini (verified with temperature=0 and structured output). What failed and what we changed: (1) Mercury came back "found" because the results only showed the bank, so the LLM now first lists `same_name_companies`, and code forces "ambiguous" when there's no context and 2+ are listed (then 5/5 runs ambiguous; Brex/Airwallex still "found"). (2) Zxqvtrbl Labs got a "better" query identical to the first and was once marked ambiguous ("Labs", "World Labs"), so a repeated query now falls back to a different one, and code forces "not_enough_info" when the company name isn't in the results. (3) Ramp was once "ambiguous" despite its context, so ambiguity is ignored when context is given (one more search instead). Added pydantic as a direct dependency.
