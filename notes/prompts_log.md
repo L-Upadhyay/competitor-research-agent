@@ -415,3 +415,55 @@ Small addition to app.py only: timing. Don't change anything in agent/, main.py,
 ```
 
 **Result:** Worked; test_app.py still 2/2 PASS. Each invoke is timed with perf_counter (including one that raises) and logs "[timing] this step took X s"; agent_seconds and steps are in DEFAULTS, so Reset clears them (verified). The caption appears under the saved / handoff / rejected result (checked on the reject path: "Agent working time: 0 min 0 s across 3 steps", 0 s because the fakes are instant). Real-run timings not observed yet. Only app.py changed.
+
+---
+
+## README, project description and .gitignore
+
+**Time:** 2026-09-16 22:06
+
+```
+Write README.md (replace the title-only file) and set the pyproject.toml description to "Human-in-the-loop competitor research agent built with LangGraph and You.com". Also add .agents/ and .claude/ to .gitignore. Do NOT change any code, tests or outputs. Plain, factual tone: no emojis, no words like "enterprise", "production-ready" or "scalable".
+
+Sections, in this order:
+
+1. Title "Competitor Research Agent" + one short paragraph: what it does (company in -> top 3 competitors -> pricing, core features, positioning, recent news with sources -> brief), with a human approving the key steps. One line: built for Week 3 of The Gen Academy "Mastering Agentic AI" (use case 3A, code track).
+
+2. How it works: this Mermaid diagram exactly (GitHub renders it):
+```mermaid
+flowchart TD
+    U["User: company + optional context"] --> D["Agent 1: Discovery"]
+    D -->|found| C{"Human: confirm competitors"}
+    D -->|ambiguous or not found| Q{"Human: clarify company"}
+    Q -->|max 2 times| D
+    D -->|tool error, or still unclear| H["Handoff: explain what failed"]
+    C --> G["Agent 2: Gather web and news"]
+    G --> X["Agent 3: Extract facts with sources"]
+    X -->|no usable findings| H
+    X -->|findings| B["Brief writer"]
+    B --> A{"Human: approve brief"}
+    A -->|approve| S["Save to outputs/"]
+    A -->|reject| E["End, not saved"]
+```
+   Then a small table of external services: You.com Search API (web + news search, YDC_API_KEY), OpenAI gpt-5.4-mini (discovery and extraction, OPENAI_API_KEY), Nebius Qwen3-30B-A3B-Instruct (executive summary, NEBIUS_API_KEY, falls back to OpenAI if unavailable).
+
+3. What makes it an agent: five one-line bullets (decides next step, calls tools, holds state across pauses via LangGraph checkpointer, recovers from errors, hands off to a human), each naming the file where it happens.
+
+4. Quick start: prerequisites (Python 3.12, uv), clone, `uv sync`, copy .env.example to .env and add keys, run `uv run streamlit run app.py`, terminal fallback `uv run python main.py`, failure demo (sidebar field, or `uv run python main.py --fail Brex`).
+
+5. Project structure: tree with a one-line comment per file (agent/*, app.py, main.py, scripts/*, outputs/, notes/prompts_log.md).
+
+6. Error handling and guardrails: a table of failure -> what the agent does (search timeout/429/5xx retry once; failed competitor skipped and listed under Data gaps; empty results reworded retry; 20-search cap; You.com or LLM failure in discovery -> handoff; all extractions fail -> handoff; Nebius fails -> OpenAI; ambiguous name -> ask human, max 2 then handoff; nothing saved without approval). Then a short bullet list of guardrails in code: company name must appear in results, news and sources must be real result URLs, competitor named as a whole word, sponsored content dropped, publish dates and "old" flag set in code, max 3 competitors / 5 features / 3 news.
+
+7. Sample output: links to the three files in outputs/ and the first ~15 lines of outputs/ramp_brief.md in a code block.
+
+8. Testing: `uv run python scripts/test_edge_cases.py` and `uv run python scripts/test_app.py` (fakes, no API calls); `uv run python scripts/test_graph.py` (real API calls, regenerates outputs/).
+
+9. Limitations and next steps: competitor picks vary between runs (hence the human confirm step); news filter can let through company blog listicles and passing mentions; memory lasts one run only (in-memory checkpointer); no defence against prompt injection in web content; terminal and local Streamlit only; no evaluation beyond the scripted runs.
+
+10. Build notes: designed with Claude (chat) and implemented with Claude Code; every build prompt is in notes/prompts_log.md.
+
+Then log, commit and push.
+```
+
+**Result:** Worked. README.md now has all 10 sections in order: the Mermaid diagram copied exactly, a services table, the agent bullets with file names, quick start, a project tree covering all 7 scripts plus .env.example and pyproject.toml, the error table and guardrails, sample output (first 15 lines of outputs/ramp_brief.md), testing, limitations and build notes. The pyproject.toml description is set, and .agents/ and .claude/ are in .gitignore. No emojis. The only banned word is "Enterprise", inside the copied brief excerpt (Brex's plan name). No code, tests or outputs changed.
