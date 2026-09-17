@@ -1,47 +1,47 @@
 # Quick manual check that the You.com API key and search endpoint work.
+
 import os
 import sys
+from pathlib import Path
 
-import requests
-from dotenv import load_dotenv
+# Let this script find the "agent" folder in the project root.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-SEARCH_URL = "https://api.you.com/v1/search"
-QUERY = "Ramp corporate card competitors"
+from agent.tools import search_you  # noqa: E402
+
+
+def show(result):
+    """Print a search result in a readable way."""
+    print(f"ok: {result['ok']}")
+    if not result["ok"]:
+        print(f"error: {result['error']}")
+        return
+    print(f"web results: {len(result['web'])}, news results: {len(result['news'])}")
+    for item in result["web"] + result["news"]:
+        print(f"- {item['title']}\n  {item['url']}\n  {item['snippet'][:120]}...")
 
 
 def main():
-    load_dotenv()
-    api_key = os.getenv("YDC_API_KEY")
-    if not api_key:
+    if not os.getenv("YDC_API_KEY") and not Path(".env").exists():
         sys.exit("YDC_API_KEY is missing. Add it to your .env file (see .env.example).")
 
-    response = requests.get(
-        SEARCH_URL,
-        headers={"X-API-Key": api_key},
-        params={"query": QUERY, "count": 3},
-        timeout=20,
-    )
-    print(f"Status code: {response.status_code}")
+    print("=== a) normal search ===")
+    show(search_you("Brex corporate card pricing"))
 
+    print("\n=== b) recent news search ===")
+    show(search_you("Brex news", recent_only=True))
+
+    print("\n=== c) failure with a fake API key ===")
+    real_key = os.environ.get("YDC_API_KEY")
+    os.environ["YDC_API_KEY"] = "fake-key-for-testing"
     try:
-        data = response.json()
-    except ValueError:
-        sys.exit(f"Response was not JSON:\n{response.text[:500]}")
-
-    results = data.get("results") if isinstance(data, dict) else None
-    if not isinstance(results, dict) or "web" not in results:
-        print("Unexpected response shape.")
-        if isinstance(data, dict):
-            print(f"Top-level keys: {list(data.keys())}")
+        show(search_you("Brex corporate card pricing"))
+    finally:
+        # Put the real key back no matter what happened.
+        if real_key is None:
+            os.environ.pop("YDC_API_KEY", None)
         else:
-            print(f"Top-level type: {type(data).__name__}")
-        sys.exit(1)
-
-    print("\nWeb results:")
-    for i, item in enumerate(results.get("web", []), start=1):
-        print(f"{i}. {item.get('title')}\n   {item.get('url')}")
-
-    print(f"\nNews results: {len(results.get('news', []))}")
+            os.environ["YDC_API_KEY"] = real_key
 
 
 if __name__ == "__main__":
