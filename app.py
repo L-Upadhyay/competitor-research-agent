@@ -14,6 +14,7 @@
 import contextlib
 import io
 import os
+import time
 from pathlib import Path
 
 import streamlit as st
@@ -35,6 +36,8 @@ DEFAULTS = {
     "final": None,       # the agent's final state once the run has ended
     "last_output": "",   # what the agent printed during its most recent step
     "run_error": "",     # a friendly error message if something crashed
+    "agent_seconds": 0.0,  # total time the agent spent working (not time waiting for the human)
+    "steps": 0,          # how many times the agent ran between human answers
 }
 for key, value in DEFAULTS.items():
     if key not in st.session_state:
@@ -51,12 +54,23 @@ def reset():
 def run_agent(graph_input):
     """Run (or resume) the agent until it pauses or finishes, capturing everything it prints."""
     captured = io.StringIO()
+
+    def record_timing(start):
+        """Add this step's working time to the log and the running total."""
+        seconds = time.perf_counter() - start
+        st.session_state.agent_seconds += seconds
+        st.session_state.steps += 1
+        st.session_state.log += f"[timing] this step took {seconds:.1f} s\n"
+
+    # Only the agent's own work is timed; waiting for the human happens between calls.
+    start = time.perf_counter()
     try:
         with st.spinner("The agent is working... this can take a minute."):
             with contextlib.redirect_stdout(captured):
                 result = st.session_state.graph.invoke(graph_input, st.session_state.config)
     except Exception as e:
         st.session_state.log += captured.getvalue()
+        record_timing(start)
         st.session_state.payload = None
         st.session_state.run_error = (
             f"Sorry, something went wrong and the run stopped ({e.__class__.__name__}: {e}). "
@@ -65,6 +79,7 @@ def run_agent(graph_input):
         return
 
     st.session_state.log += captured.getvalue()
+    record_timing(start)
     st.session_state.last_output = captured.getvalue()
 
     pauses = result.get("__interrupt__")
@@ -173,6 +188,11 @@ elif final is not None:
         st.error(handoff_text.strip().strip("=").strip())
     else:
         st.warning("Brief was not saved.")
+
+    # Total time the agent itself spent working (time spent by the human answering isn't counted).
+    minutes, seconds = divmod(round(st.session_state.agent_seconds), 60)
+    steps = st.session_state.steps
+    st.caption(f"Agent working time: {minutes} min {seconds} s across {steps} step{'s' if steps != 1 else ''}")
 
 else:
     st.write("Enter a company in the sidebar and press **Start research**.")

@@ -398,3 +398,20 @@ Do not commit any new or changed files in outputs/ (delete any test brief the te
 ```
 
 **Result:** Worked on the first run; 0 of 2 fix rounds used. Added streamlit 1.64.0. scripts/test_app.py (AppTest, reusing the fakes from test_edge_cases.py, run with invalid API keys) passes 2/2: the happy path (company -> Start -> accept -> approve -> "Brief saved to" success and the approval line in the log) and an extra case where You.com fails and the handoff text appears in st.error. The test brief uses the made-up company "AppTestCo" and is deleted afterwards. The app also started headless (health "ok", page HTTP 200) and was stopped. agent/, main.py and outputs/ unchanged. Launch: uv run streamlit run app.py. Not tested in a browser with real API calls; the clarify, "Use my list" and reject screens are only exercised by code review.
+
+---
+
+## Streamlit interface: agent timing
+
+**Time:** 2026-09-16 22:03
+
+```
+Small addition to app.py only: timing. Don't change anything in agent/, main.py, tests' fakes or outputs/.
+
+1. In run_agent, measure how long each graph.invoke(...) takes with time.perf_counter(). Append a line to the log like "[timing] this step took 41.2 s".
+2. Keep a running total in st.session_state (add "agent_seconds": 0.0 and "steps": 0 to DEFAULTS so Reset clears them). Only the invoke time is counted, never the time the human spends answering.
+3. When the run ends (any ending: saved, handoff, rejected), show st.caption below the result: "Agent working time: X min Y s across N steps".
+4. Re-run scripts/test_app.py (must still pass 2/2). Then log, commit and push.
+```
+
+**Result:** Worked; test_app.py still 2/2 PASS. Each invoke is timed with perf_counter (including one that raises) and logs "[timing] this step took X s"; agent_seconds and steps are in DEFAULTS, so Reset clears them (verified). The caption appears under the saved / handoff / rejected result (checked on the reject path: "Agent working time: 0 min 0 s across 3 steps", 0 s because the fakes are instant). Real-run timings not observed yet. Only app.py changed.
