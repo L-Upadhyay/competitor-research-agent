@@ -367,3 +367,34 @@ Limit yourself to 2 fix rounds. Then log, commit and push.
 ```
 
 **Result:** Worked; 0 of 2 fix rounds used. Edge cases still 4/4 PASS. News improved: Ramp brief -> Brex 1, Airwallex 3 (Fortune), Expensify 3 press releases back (Claude, Rillet); Mercury brief -> Brex 1, Rho 3 (incl. $75m Series B), Grasshopper Bank none; Ramp with Brex failing -> Airwallex 3, BILL Spend & Expense none. All dates from You.com's publish date. Still off (blocklist kept exactly as specified): Rho's own blog listicles "Best Banks for Startup Business Banking in 2026" and "Best Banks for Seed-Stage Startups" pass as news; "Brex Benchmark" is a Brex blog post; the Brex item in the Mercury brief is an American Express story that mentions Brex. Markers like "best " or "/blog" would catch most of these.
+
+---
+
+## Streamlit interface
+
+**Time:** 2026-09-16 21:54
+
+```
+Add a Streamlit interface. New file only: app.py in the project root. Do NOT change anything in agent/ or main.py (the terminal version stays as the fallback). Keep it simple and commented for a non-coder.
+
+1. `uv add streamlit`.
+
+2. app.py, using build_graph, initial_state and make_config from agent.graph, and Command from langgraph.types:
+   - Keep the graph, config (thread_id), current pause payload, captured log text and final result in st.session_state, so button clicks don't restart the run.
+   - Sidebar: company (text), optional context (text), "Demo: make searches fail for" (text, optional; sets FAIL_SEARCH_FOR for this run, cleared otherwise), Start research button, Reset button (also clears FAIL_SEARCH_FOR).
+   - Every graph.invoke(...) runs inside st.spinner and captures printed output with contextlib.redirect_stdout. Append it to the log and show it in an expander "Agent decisions log" (open by default) as a code block, so the routing decisions are visible on screen.
+   - Pauses, based on payload["kind"]:
+     * clarify: show the question in st.info, a text input, and a Submit button -> resume with the text.
+     * confirm_competitors: show the competitors as a list, an "Accept these competitors" button (resume with ""), plus a text input prefilled with the comma-separated list and a "Use my list" button (resume with that text).
+     * approve_brief: render the brief with st.markdown, then "Approve and save" (resume "approve") and "Reject" (resume "reject") buttons.
+   - When the run ends: if saved_path is set, show st.success with the path and a st.download_button for the brief. If it ended in handoff, show the captured HANDOFF text in st.error. If rejected, show st.warning "Brief was not saved."
+   - Wrap every invoke in try/except and show a friendly st.error instead of a traceback.
+
+3. Verification without real API calls: add scripts/test_app.py using streamlit.testing.v1.AppTest, with the same fakes as scripts/test_edge_cases.py. Simulate: enter a company, Start, accept competitors, approve, and check that a success message appears. If AppTest is too awkward, at minimum start the app headless (`uv run streamlit run app.py --server.headless true`), confirm it starts without errors, then stop it.
+
+4. Tell me the exact command to launch the app.
+
+Do not commit any new or changed files in outputs/ (delete any test brief the tests create). Hard timebox: if this isn't working after 2 fix rounds, stop, leave app.py committed as-is, and report what's broken. Then log, commit and push.
+```
+
+**Result:** Worked on the first run; 0 of 2 fix rounds used. Added streamlit 1.64.0. scripts/test_app.py (AppTest, reusing the fakes from test_edge_cases.py, run with invalid API keys) passes 2/2: the happy path (company -> Start -> accept -> approve -> "Brief saved to" success and the approval line in the log) and an extra case where You.com fails and the handoff text appears in st.error. The test brief uses the made-up company "AppTestCo" and is deleted afterwards. The app also started headless (health "ok", page HTTP 200) and was stopped. agent/, main.py and outputs/ unchanged. Launch: uv run streamlit run app.py. Not tested in a browser with real API calls; the clarify, "Use my list" and reject screens are only exercised by code review.
