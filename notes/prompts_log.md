@@ -178,3 +178,37 @@ Run it, show me the output, then log, commit and push.
 ```
 
 **Result:** Worked after several fixes; all 3 cases now match expectations. Model: gpt-5.4-mini (verified with temperature=0 and structured output). What failed and what we changed: (1) Mercury came back "found" because the results only showed the bank, so the LLM now first lists `same_name_companies`, and code forces "ambiguous" when there's no context and 2+ are listed (then 5/5 runs ambiguous; Brex/Airwallex still "found"). (2) Zxqvtrbl Labs got a "better" query identical to the first and was once marked ambiguous ("Labs", "World Labs"), so a repeated query now falls back to a different one, and code forces "not_enough_info" when the company name isn't in the results. (3) Ramp was once "ambiguous" despite its context, so ambiguity is ignored when context is given (one more search instead). Added pydantic as a direct dependency.
+
+---
+
+## Researcher / gatherer agent (Agent 2)
+
+**Time:** 2026-09-16 21:01
+
+```
+Next component: agent/researcher.py (Agent 2, the gatherer). Keep it simple and commented for a non-coder. Don't change discovery.py.
+
+1. Demo failure switch in agent/tools.py:
+   - If the environment variable FAIL_SEARCH_FOR is set and its value appears in the query (case-insensitive), simulate a timeout INSIDE the request attempt, so the real retry-once logic runs, and then return ok=False with the error "simulated timeout (FAIL_SEARCH_FOR)".
+   - Print a log line when the retry happens, e.g. "[search] timeout, retrying once...".
+
+2. agent/researcher.py: a function gather(state) -> dict of state updates.
+   - MAX_SEARCHES = 12 constant at the top (whole run, including discovery searches already in search_count).
+   - For each competitor in state["competitors"]:
+     a) product search: "{competitor} pricing features" (count 5)
+     b) news search: "{competitor} {company_context} news" (count 5, recent_only=True); if company_context is empty, use "{competitor} company news"
+     - If a search succeeds but returns 0 web AND 0 news results, retry once with a reworded query ("{competitor} official site" for product, "{competitor} announcement" for news).
+     - If a search fails (ok=False), append a clear message to errors, and continue with the next search / next competitor. Never crash.
+     - Before every search, check search_count against MAX_SEARCHES. If the limit is reached, stop gathering, append "search limit reached" to errors, and return what was gathered so far.
+   - Store raw_results[competitor] = {"product": [...], "news": [...], "complete": True/False}, where complete=False if any search for that competitor failed or was skipped.
+   - Log lines like "[gather] Brex: product search (5 results)", "[gather] Airwallex: news search FAILED -> skipping", "[gather] search limit reached".
+
+3. scripts/test_researcher.py with company="Ramp", company_context="corporate card and spend management", competitors=["Brex","Airwallex","Expensify"]. Run 3 cases, printing only the log lines, then per competitor: number of product results, number of news results, complete flag, plus the errors list and search_count:
+   a) normal run, search_count starting at 1
+   b) FAIL_SEARCH_FOR="Airwallex" (set in the script via os.environ): expect the retry log, the Airwallex error recorded, Brex and Expensify still complete
+   c) search_count starting at 9: expect the limit to stop it partway
+
+Limit yourself to 2 fix rounds. If something is still off after that, stop and report it rather than continuing to iterate. Then log, commit and push.
+```
+
+**Result:** Worked on the first run; 0 of 2 fix rounds used. (a) all 3 complete, search_count 1 -> 7; (b) retry log shown twice, 2 Airwallex errors recorded, Brex and Expensify complete; (c) stopped after 3 searches (9 -> 12): Brex complete, Airwallex product only (complete=False), Expensify not reached (complete=False), "search limit reached" in errors. Fixed before the first run: product results were saved only after the news search, so a limit hit in between would have lost them. Not verified: the empty-result reworded retry (You.com returned results even for "Zxqvtrbl Labs"). discovery.py unchanged.

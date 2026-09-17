@@ -57,19 +57,30 @@ def search_you(query, count=5, recent_only=False):
     if recent_only:
         params["freshness"] = RECENT_WINDOW
 
+    # Demo failure switch: if FAIL_SEARCH_FOR is set (e.g. "Airwallex") and that
+    # text is in the query, pretend You.com timed out. Used to show that the
+    # agent copes with a broken search instead of crashing.
+    fail_for = os.getenv("FAIL_SEARCH_FOR", "").strip()
+    simulate_timeout = bool(fail_for) and fail_for.lower() in query.lower()
+
     # Step 3: send the request, allowing one retry for temporary problems.
     for attempt in (1, 2):
         is_last_attempt = attempt == 2
 
         try:
+            if simulate_timeout:
+                raise requests.Timeout("simulated timeout")
             response = requests.get(
                 SEARCH_URL, headers=headers, params=params, timeout=TIMEOUT_SECONDS
             )
         except requests.Timeout:
             # You.com took too long. Try once more, then give up.
             if not is_last_attempt:
+                print("[search] timeout, retrying once...")
                 time.sleep(RETRY_WAIT_SECONDS)
                 continue
+            if simulate_timeout:
+                return {"ok": False, "error": "simulated timeout (FAIL_SEARCH_FOR)"}
             return {"ok": False, "error": f"You.com did not respond within {TIMEOUT_SECONDS} seconds (tried twice)."}
         except requests.RequestException as e:
             # No internet, bad address, etc. Retrying won't help.
@@ -85,6 +96,7 @@ def search_you(query, count=5, recent_only=False):
         # these are often temporary, so wait a moment and try once more.
         if status == 429 or status >= 500:
             if not is_last_attempt:
+                print(f"[search] HTTP {status}, retrying once...")
                 time.sleep(RETRY_WAIT_SECONDS)
                 continue
             reason = "rate limit reached" if status == 429 else "server error"
